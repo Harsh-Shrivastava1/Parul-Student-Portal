@@ -3,10 +3,11 @@ import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { User, Mail, Phone, MapPin, Code2, Languages, Briefcase, Edit3, Save, X, Camera, Star } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Code2, Languages, Briefcase, Edit3, Save, X, Camera, Star, FileText } from 'lucide-react';
 import { profileService } from '../services/profileService';
+import { applicationService } from '../services/applicationService';
 import { useAuth } from '../hooks/useAuth';
-import type { User as UserType } from '../types';
+import type { User as UserType, Application } from '../types';
 import { PageHeader } from '../components/shared/PageHeader';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -49,6 +50,7 @@ const InfoRow: React.FC<{ icon: React.ReactNode; label: string; value?: string |
 const Profile: React.FC = () => {
   const { user: authUser, login } = useAuth();
   const [profile, setProfile] = useState<UserType | null>(null);
+  const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -63,6 +65,11 @@ const Profile: React.FC = () => {
     // Falls back to authUser session data if not found in DB.
     const dbData = await profileService.getUserProfile(authUser.enrollmentNumber);
     const data = dbData ?? authUser;
+
+    if (data) {
+      const apps = await applicationService.getApplications(data.enrollmentNumber || data.id);
+      setApplications(apps);
+    }
 
     setProfile(data);
     reset({
@@ -208,6 +215,19 @@ const Profile: React.FC = () => {
               </span>
             </div>
             <p className="text-zinc-400 text-xs mt-1 font-mono tracking-wide">ID: {profile.enrollmentNumber}</p>
+            {applications.some(app => ['Training Starts', 'Training Completed', 'Returned to TEC Cell', 'Internship Starts', 'Internship Completed', 'Final Completion'].includes(app.status)) && (
+              <Button
+                variant="outline"
+                className="mt-3 gap-2 border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 hover:text-blue-800"
+                onClick={() => {
+                  toast.success('Downloading Attendance Form PDF...');
+                  // Implementation for actual PDF download could be hooked up here
+                }}
+              >
+                <FileText size={16} />
+                Download Attendance Form PDF
+              </Button>
+            )}
           </div>
         </div>
       </motion.div>

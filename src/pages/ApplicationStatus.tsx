@@ -17,29 +17,33 @@ import { FileText } from 'lucide-react';
 const TIMELINE_STEPS: ApplicationStatus[] = [
   'Applied',
   'Under Review',
-  'Shortlisted',
   'Interview Scheduled',
   'Interview Completed',
   'Selected',
   'Assigned to Respective Cell',
-  'Training',
+  'Training Assigned',
+  'Training Starts',
   'Training Completed',
-  'Internship Running',
-  'Completed',
+  'Returned to TEC Cell',
+  'Internship Starts',
+  'Internship Completed',
+  'Final Completion',
 ];
 
 const STATUS_DESCRIPTIONS: Record<ApplicationStatus, string> = {
   Applied: 'Your application has been submitted and is awaiting initial review.',
   'Under Review': 'The department coordinator is reviewing your application and profile.',
-  Shortlisted: 'Congratulations! You have been shortlisted. Please prepare for the interview.',
   'Interview Scheduled': 'Your interview has been scheduled.',
   'Interview Completed': 'Your interview has been completed. Awaiting results.',
   Selected: 'You have been selected for the position.',
   'Assigned to Respective Cell': 'You have been assigned to your respective cell.',
-  Training: 'Training has commenced.',
+  'Training Assigned': 'A training program has been assigned to you.',
+  'Training Starts': 'Your training has commenced. Please ensure your attendance.',
   'Training Completed': 'Training completed successfully.',
-  'Internship Running': 'Your internship has started and is currently running.',
-  Completed: 'Internship completed successfully. Certificate will be issued.',
+  'Returned to TEC Cell': 'Training is finished, returning control to TEC Cell for final placement.',
+  'Internship Starts': 'Your internship has officially started.',
+  'Internship Completed': 'Internship period has ended.',
+  'Final Completion': 'Final completion achieved. Certificates will be issued.',
   Rejected: 'Your application was not selected. Do not be discouraged — apply for other opportunities.',
 };
 
@@ -149,7 +153,7 @@ const ApplicationStatus: React.FC = () => {
               </div>
 
               {/* Action Buttons */}
-              {['Training', 'Training Completed', 'Internship Running', 'Completed'].includes(currentApp.status) && (
+              {['Training Assigned', 'Training Starts', 'Training Completed', 'Returned to TEC Cell', 'Internship Starts', 'Internship Completed', 'Final Completion'].includes(currentApp.status) && (
                 <div className="flex gap-4 mb-6">
                   <Button 
                     onClick={() => navigate(`/applications/${currentApp.id}/training`)}
@@ -157,7 +161,7 @@ const ApplicationStatus: React.FC = () => {
                   >
                     Go to Training Module
                   </Button>
-                  {['Internship Running', 'Completed'].includes(currentApp.status) && (
+                  {['Internship Starts', 'Internship Completed', 'Final Completion'].includes(currentApp.status) && (
                     <Button 
                       onClick={() => navigate(`/applications/${currentApp.id}/internship`)}
                       className="flex-1 bg-teal-600 hover:bg-teal-700"

@@ -71,15 +71,17 @@ export interface Internship {
 export type ApplicationStatus =
   | 'Applied'
   | 'Under Review'
-  | 'Shortlisted'
   | 'Interview Scheduled'
   | 'Interview Completed'
   | 'Selected'
   | 'Assigned to Respective Cell'
-  | 'Training'
+  | 'Training Assigned'
+  | 'Training Starts'
   | 'Training Completed'
-  | 'Internship Running'
-  | 'Completed'
+  | 'Returned to TEC Cell'
+  | 'Internship Starts'
+  | 'Internship Completed'
+  | 'Final Completion'
   | 'Rejected';
 
 export interface ApplicationFormData {
